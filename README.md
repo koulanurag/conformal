@@ -14,7 +14,7 @@ Conformal uses the following dependencies:
 - HDF5 and h5py (optional, required if you use model saving/loading functions)
 - Optional but recommended if you use CNNs: cuDNN.
 
-To install Conformal, `cd` to the Keras folder and run the install command:
+To install Conformal, `cd` to the conformal folder and run the install command:
 ```sh
 sudo python setup.py install
 ```
