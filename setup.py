@@ -8,5 +8,5 @@ setup(name='conformal',
       license='MIT',
       packages=['conformal'],
       install_requires=['numpy', 'matplotlib'],
-      keywords=['deep-learning','conformal-prediction'],
+      keywords=['deep-learning','conformal-prediction','machine-learning'],
       zip_safe=False)
