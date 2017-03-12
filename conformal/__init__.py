@@ -87,7 +87,7 @@ class ConformalPrediction:
         if self.selected_threshold_mode == 0:
             thresholds = {label: np.percentile(measure[label], 100 - self.epsilon) for label in measure.keys()}
         elif self.selected_threshold_mode == 1:
-            _percentile = np.percentile(np.concatenate(measure[label] for label in measure.keys()), 100 - self.epsilon)
+            _percentile = np.percentile(np.concatenate([measure[label] for label in measure.keys()]), 100 - self.epsilon)
             thresholds = {label: _percentile for label in measure.keys()}
 
         return thresholds
