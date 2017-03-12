@@ -5,18 +5,21 @@ from . import measures
 import os
 import numpy as np
 import matplotlib as mpl
+
 mpl.use('Agg')  # to plot graphs over a server shell since the default display is not available on servers.
 import matplotlib.pyplot as plt
 
 
 class ConformalPrediction:
-    def __init__(self, model_output, actual, epsilon, measure=measures.SoftMax()):
+    def __init__(self, model_output, actual, epsilon=5, measure=measures.SoftMax(), threshold_mode=0):
         """
 
         :param model_output: output of the network for the validation data
         :param actual: list of ground truth labels
         :param epsilon:
         :param measure: object of Measure used for determining non-conformity score
+        :param threshold_mode: It can be 0 or 1 . If 0,we have seperate thresholds for each label.And, If
+                                1, one threshold for all the labels
         """
         if type(model_output).__module__ != np.__name__:
             raise TypeError('model_output must be numpy array')
@@ -24,6 +27,13 @@ class ConformalPrediction:
             raise TypeError('actual must be a list')
         if epsilon < 0 or epsilon > 100:
             raise ValueError('epsilon should be between 0 and 100 ,both inclusive')
+        if type(threshold_mode).__name__ != 'int':
+            raise TypeError('threshold_mode must be an integer in [0,1]')
+        if threshold_mode not in [0, 1]:
+            raise ValueError('threshold_mode must be an integer in [0,1]')
+
+        self.selected_threshold_mode = threshold_mode
+        self.threshold_modes = [0, 1]
         self.measure = measure
         self.epsilon = epsilon
         self.labels = model_output.shape[1]
@@ -72,7 +82,15 @@ class ConformalPrediction:
         measure = {label: [] for label in range(model_output.shape[1])}
         for i, output in enumerate(model_output):
             measure[np.where(actual[i] == 1)[0][0]].append(self.measure.measure(output, np.where(actual[i] == 1)[0][0]))
-        return {label: np.percentile(measure[label], 100 - self.epsilon) for label in measure.keys()}
+
+        thresholds = None
+        if self.selected_threshold_mode == 0:
+            thresholds = {label: np.percentile(measure[label], 100 - self.epsilon) for label in measure.keys()}
+        elif self.selected_threshold_mode == 1:
+            _percentile = np.percentile(np.concatenate(measure[label] for label in measure.keys()), 100 - self.epsilon)
+            thresholds = {label: _percentile for label in measure.keys()}
+
+        return thresholds
 
     def predict(self, model_output):
         """A label is included in the set of predicted labels
