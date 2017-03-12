@@ -1,0 +1,19 @@
+*.DS_Store
+*.pyc
+*.swp
+temp/*
+dist/*
+build/*
+conformal/datasets/data/*
+conformal/datasets/temp/*
+docs/site/*
+docs/theme/*
+tags
+conformal.egg-info
+
+# test-related
+.coverage
+.cache
+
+# developer environments
+.idea
