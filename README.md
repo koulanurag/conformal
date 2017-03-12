@@ -1,6 +1,7 @@
 # Conformal Prediction
 
-TODO: Write a project description
+Conformal prediction is a framework for providing accuracy guarantees on the predictions
+of a base predictor.
 
 ------------------
 
