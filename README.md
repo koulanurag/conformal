@@ -28,8 +28,11 @@ sudo pip install conformal
 
 
 ## Usage
-
-TODO: Write usage instructions
+```sh
+cf = ConformalPrediction(model_prediction, Y_test, 5, measure=SoftMax(), threshold_mode=0)
+cf_prediction = cf.predict(model_prediction)
+cf_accuracy = cf.evaluate(cf_prediction, Y_test)
+```
 
 ## Contributing
 
