@@ -11,7 +11,7 @@ import matplotlib.pyplot as plt
 
 
 class ConformalPrediction:
-    def __init__(self, model_output, actual, epsilon=5, measure=measures.SoftMax(), threshold_mode=0):
+    def __init__(self, model_output, actual, epsilon=5, measure=measures.Ratio(), threshold_mode=0):
         """
 
         :param model_output: output of the network for the validation data
@@ -110,7 +110,9 @@ class ConformalPrediction:
     @staticmethod
     def __save_histogram_plot(labels_count, plots_path, append_title):
         title = append_title if append_title is not None else "Histogram of Count of Labels in Prediction "
-        plt.hist(labels_count, bins='auto')
+        arr = plt.hist(labels_count, bins='auto')
+        for i in range(len(arr[2])):
+            plt.text(arr[1][i], arr[0][i], str(int(arr[0][i])))
         plt.grid(True)
         plt.title(title)
         plt.ylabel('# of predictions')

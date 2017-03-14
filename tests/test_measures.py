@@ -1,7 +1,3 @@
-from conformal import ConformalPrediction
-from conformal.measures import SoftMax, Diff, Binary
-
-
 def test_softmax():
     assert True
 
