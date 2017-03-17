@@ -20,6 +20,7 @@ class Ratio(Measure):
         :return: non-conformity measure
         """
         return max(list(output[0:label]) + list(output[label + 1:])) / output[label]
+        # return output[label]/max(list(output[0:label]) + list(output[label + 1:]))
 
 
 class Binary(Measure):

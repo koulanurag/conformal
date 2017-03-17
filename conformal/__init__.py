@@ -8,6 +8,7 @@ import matplotlib as mpl
 
 mpl.use('Agg')  # to plot graphs over a server shell since the default display is not available on servers.
 import matplotlib.pyplot as plt
+plt.rcdefaults()
 
 
 class ConformalPrediction:
@@ -68,9 +69,12 @@ class ConformalPrediction:
         :return: histogram
         """
         labels_count = [len(_) for _ in predictions]
-        histogram = np.histogram(labels_count, bins=self.labels)
+        histogram = np.histogram(labels_count, bins=self.labels+1)
+        histogram = np.histogram(labels_count + [_ for _ in range(self.labels + 1)], bins=self.labels + 1)
+        histogram = [y - 1 for y in histogram[0]]
+
         if save_path is not None:
-            self.__save_histogram_plot(labels_count, save_path, title)
+            self.__save_histogram_plot(histogram,self.labels,save_path, title)
         return histogram
 
     def __non_conformity_thresholds(self, model_output, actual):
@@ -108,12 +112,25 @@ class ConformalPrediction:
         return predictions
 
     @staticmethod
-    def __save_histogram_plot(labels_count, plots_path, append_title):
+    def __save_histogram_plot(labels_count,bins, plots_path, append_title):
+        y_pos = np.linspace(1,bins+1, bins+1)
+        rects = plt.bar(y_pos, labels_count, align='center', alpha=0.5)
+
+        def autolabel(rects):
+            """
+            Attach a text label above each bar displaying its height
+            """
+            for rect in rects:
+                height = rect.get_height()
+                plt.text(rect.get_x() + rect.get_width() / 2., 1.05 * height,
+                        '%d' % int(height),
+                        ha='center', va='bottom')
+
         title = append_title if append_title is not None else "Histogram of Count of Labels in Prediction "
-        arr = plt.hist(labels_count, bins='auto')
-        for i in range(len(arr[2])):
-            plt.text(arr[1][i], arr[0][i], str(int(arr[0][i])))
+        plt.xticks(y_pos, range(0,bins+1))
+        autolabel(rects)
         plt.grid(True)
+        plt.ylim((0, 10000))
         plt.title(title)
         plt.ylabel('# of predictions')
         plt.xlabel('# bins')
