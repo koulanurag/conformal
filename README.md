@@ -3,8 +3,7 @@
 Conformal prediction is a framework for providing accuracy guarantees on the predictions
 of a base predictor.
 
-------------------
-
+**_[Status: No Longer Maintained | Code provided as it is]_**
 
 ## Installation
 
@@ -16,14 +15,8 @@ Conformal uses the following dependencies:
 
 To install Conformal, `cd` to the conformal folder and run the install command:
 ```sh
-sudo python setup.py install
+python setup.py install
 ```
-
-You can also install Conformal from PyPI:
-```sh
-sudo pip install conformal
-```
-
 ------------------
 
 
@@ -33,6 +26,8 @@ cf = ConformalPrediction(model_prediction, Y_test, 5, measure=SoftMax(), thresho
 cf_prediction = cf.predict(model_prediction)
 cf_accuracy = cf.evaluate(cf_prediction, Y_test)
 ```
+
+Please refer [here](https://github.com/koulanurag/deep-conformal) for more usage details.
 
 ## Contributing
 

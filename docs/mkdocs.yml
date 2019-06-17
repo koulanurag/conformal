@@ -1,5 +1,0 @@
-site_name: Conformal Prediction
-docs_dir: source
-pages:
-    - Home: index.md
-theme: readthedocs
